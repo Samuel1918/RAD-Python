@@ -10,6 +10,14 @@ class PrincipalBD():
         self.treeProdutos.heading("nome",text="Nome:" )
         self.treeProdutos.heading("preço", text="Preço: ")
         self.treeProdutos.pack()
+        self.lnome = tk.Label(self.janela,text="Nome:")
+        self.entrynome = tk.Entry(self.janela)
+        self.entrynome.pack()
+        self.lpreco = tk.Label(self.janela,text="preço:")
+        self.entrypreco.pack()
+        self.entrypreco = tk.Entry(self.janela)
+        self.entrypreco.pack()
+
 janela = tk.Tk() #Criação da janela principal
 product_app = PrincipalBD(janela) #Cria uma instancia da classe PrincipalBD, passa como argumento a janela principal
 janela.title("Bem vindo a aplicação de Banco de dados")
