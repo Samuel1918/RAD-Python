@@ -56,7 +56,7 @@ class AppBD():
                 print("A conexão com o sqlite foi fechada!")
         return products #retorna a lista de produtos
     
-    def atualizarDados(self,id, name, price):
+    def AtualizarDados(self,id, name, price):
         self.abrirConexao()
         update_query = """UPDATE products SET name = ?,price= ? WHERE id = ?"""
         try:
@@ -71,3 +71,22 @@ class AppBD():
                 cursor.close()
                 self.connection.close()
                 print("A conexão com o sqlite foi fechada!")
+    
+    def DeleteProducts(self, id):
+        self.abrirConexao()
+        delete_query = """"DELETE FROM products WHERE id = ?"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(delete_query, (id))
+            self.connection.commit()
+            print("Produto deletado com sucesso")
+        except sqlite3.Error as error:
+            print("Falha ao deletar o produto", error)
+        finally:
+            if self.connection:
+                cursor.close()
+                self.connection.close()
+                print("A conexão com o sqlite foi fechada!")
+
+                
+        
