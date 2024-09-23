@@ -51,6 +51,26 @@ class PrincipalBD():
         except:
             print("Não foi possivel fazer o cadastro!")
 
+    def AtualizarProdutos(self):
+        try:
+            selected_item = self.treeProdutos.selection()
+            if not selected_item:
+                return
+            item = self.treeProdutos.item(selected_item)
+            product = item["values"]
+            product_id = product[0]
+
+            nome = self.entrynome.get()
+            preco = self.entrypreco.get()
+            self.objBD.update_product(product_id, nome, preco)
+            self.ExibirTela()
+
+            self.entrynome.delete(0, tk.END)
+            self.entrypreco.delete(0, tk.END)
+            print("Produto atualizado com sucesso")
+        except:
+            print("Não possivel atualizar o produto")
+
 
 janela = tk.Tk() #criação da janela principal
 product_app = PrincipalBD(janela)
