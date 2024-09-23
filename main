@@ -27,6 +27,9 @@ class PrincipalBD():
         self.btnCadastrar = tk.Button(self.janela, text="Adicionar Produtos", command=self.CadastrarProdutos)
         self.btnCadastrar.pack()
 
+        self.btnAtualizarProduto = tk.Button(self.janela, text="Atualizar produto", command=self.AtualizarProdutos)
+        self.btnAtualizarProduto.pack()
+
     def ExibirTela(self):
         try:
             products = self.objBD.select_all_products()
