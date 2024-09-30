@@ -15,6 +15,7 @@ class PrincipalBD():
         self.treeProdutos.pack()
 
         self.ExibirTela()
+
         self.lnome = tk.Label(self.janela, text="Nome:")
         self.lnome.pack()
         self.entrynome = tk.Entry(self.janela)
@@ -24,14 +25,18 @@ class PrincipalBD():
         self.entrypreco = tk.Entry(self.janela)
         self.entrypreco.pack()
 
-        self.btnCadastrar = tk.Button(self.janela, text="Adicionar Produtos", command=self.CadastrarProdutos)
+        self.btnCadastrar = tk.Button(self.janela, text="Adicionar Produtos", command=self.CadastrarProduto)
         self.btnCadastrar.pack()
 
-        self.btnAtualizarProduto = tk.Button(self.janela, text="Atualizar produto", command=self.AtualizarProdutos)
-        self.btnAtualizarProduto.pack()
+        self.bntAtualizarProduto = tk.Button(self.janela, text="Atualizar", command=self.AtualizarProduto)
+        self.bntAtualizarProduto.pack()
+
+        self.bntExcluirProduto = tk.Button(self.janela, text="Excluir", command=self.ExcluirProduto)
+        self.bntExcluirProduto.pack()
 
     def ExibirTela(self):
         try:
+            self.treeProdutos.delete(*self.treeProdutos.get_children()) 
             products = self.objBD.select_all_products()
             #print(products)
             for product in products:
@@ -40,39 +45,54 @@ class PrincipalBD():
         except:
             print("Não foi possivel exibir os campos.")
 
-    def CadastrarProdutos(self):
-        try: 
-            self.treeProdutos.delete(*self.treeProdutos.get_children()) #exclui tudo o que já foi cadastrado
-            name = self.entrynome.get()#pega o dado pelo "get" e envia pra variavel "name"
+    def CadastrarProduto(self):
+        try:
+            name = self.entrynome.get()
             price = float(self.entrypreco.get())
             self.objBD.inserirDados(name, price)
-            print(f"Produto cadastrado: nome - {name}, preço - {price}")
-            self.entrynome.delete(0, tk.END) #exclui o campo de entrada quando o usuario cadastra o produto
+            print(f'Produto cadastrado: nome - {name}, preço - {price}')
+            #limpar entradas após o cadastro
+            self.entrynome.delete(0, tk.END)
             self.entrypreco.delete(0, tk.END)
             self.ExibirTela()
-            print("Produto cadastrado com sucesso")
+            print('Produto cadastrado com sucesso')
         except:
             print("Não foi possivel fazer o cadastro!")
+    def AtualizarProduto(self):
+        try:
+            selected_item = self.treeProdutos.selection() 
+            if not selected_item:
+                return 
+            item = self.treeProdutos.item(selected_item)
+            print("item", item)
+            product = item['values']
+            print("Product", product)
+            product_id = product[0]
+            nome = self.entrynome.get()
+            preco = float(self.entrypreco.get())
+            self.objBD.update_product(product_id, nome, preco)
+            self.ExibirTela()
 
-    def AtualizarProdutos(self):
+            print("Produto atualizado com sucesso!")
+        except:
+            print("Não foi possivel fazer a atualização!")
+
+    def ExcluirProduto(self):
         try:
             selected_item = self.treeProdutos.selection()
             if not selected_item:
                 return
             item = self.treeProdutos.item(selected_item)
-            product = item["values"]
+            product = item['values']
             product_id = product[0]
-
-            nome = self.entrynome.get()
-            preco = self.entrypreco.get()
-            self.objBD.update_product(product_id, nome, preco)
+            self.objBD.delete_product(product_id)
             self.ExibirTela()
-
             self.entrynome.delete(0, tk.END)
             self.entrypreco.delete(0, tk.END)
-            print("Produto atualizado com sucesso")
+            print("Produto excluido com sucesso")
         except:
-            print("Não possivel atualizar o produto")
+            print("Não foi possivel excluir o produto!")
+
 
 
 janela = tk.Tk() #criação da janela principal
